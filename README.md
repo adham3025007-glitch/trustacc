@@ -44,6 +44,23 @@ A full-stack Node.js + Express + SQLite application with role-based authenticati
    - `http://localhost:3000/login/admin`
    - `http://localhost:3000/login/user`
 
+## Deploy on Railway
+1. Push this project to GitHub (with the root `Dockerfile` included).
+2. In Railway, click `New Project` -> `Deploy from GitHub repo`.
+3. Select this repository.
+4. Railway will build using the root `Dockerfile` automatically.
+5. In Railway project variables, set:
+   - `SESSION_SECRET` = a long random secret
+   - `DB_PATH` = `data/app.db` (optional, already defaulted)
+   - `STORAGE_DIR` = `storage` (optional, already defaulted)
+6. Deploy, then open:
+   - `https://<your-domain>/login/admin`
+   - `https://<your-domain>/login/user`
+
+### Railway Persistence Note
+- If you keep SQLite and local uploads on the container filesystem, data can be lost on redeploy/restart.
+- For persistence, use a Railway Volume (or move to managed DB + object storage).
+
 ## Deploy on Render (Free)
 1. Push this project to GitHub.
 2. In Render, click `New +` -> `Blueprint`.
