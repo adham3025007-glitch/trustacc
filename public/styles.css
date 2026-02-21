@@ -1,0 +1,170 @@
+:root {
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #1d2a3a;
+  --muted: #5f6f82;
+  --primary: #125b9a;
+  --primary-hover: #0d4a7e;
+  --danger-bg: #ffe8ea;
+  --danger-text: #9f1c30;
+  --success-bg: #e7f7ec;
+  --success-text: #1f7a35;
+  --border: #d6deea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background: linear-gradient(180deg, #eef3fb 0%, #f8fbff 100%);
+}
+
+.container {
+  width: min(1100px, 92vw);
+  margin: 2rem auto;
+}
+
+.auth-container {
+  max-width: 420px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 4px 14px rgba(0, 35, 84, 0.08);
+}
+
+.form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 0.95rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--primary-hover);
+}
+
+button.secondary {
+  background: #5f6f82;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 0.6rem;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+th {
+  background: #edf3fb;
+}
+
+.error,
+.success {
+  padding: 0.65rem;
+  border-radius: 8px;
+  margin-top: 0.7rem;
+}
+
+.error {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.success {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+.switch-link {
+  margin-top: 0.9rem;
+}
+
+a {
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    overflow: hidden;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid var(--border);
+  }
+}

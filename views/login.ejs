@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= role === "admin" ? "Admin Login" : "User Login" %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container auth-container">
+    <h1><%= role === "admin" ? "Admin Login" : "User Login" %></h1>
+    <p class="hint">Use separate login pages for each role.</p>
+
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+
+    <form method="POST" action="/login/<%= role %>" class="card form">
+      <label>Username
+        <input type="text" name="username" required />
+      </label>
+
+      <label>Password
+        <input type="password" name="password" required />
+      </label>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="switch-link">
+      <% if (role === "admin") { %>
+        <a href="/login/user">Go to user login</a>
+      <% } else { %>
+        <a href="/login/admin">Go to admin login</a>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>

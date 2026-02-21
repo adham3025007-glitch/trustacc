@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: file-portal-app
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /login/user
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DB_PATH
+        value: data/app.db
+      - key: STORAGE_DIR
+        value: storage
