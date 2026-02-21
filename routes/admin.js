@@ -44,6 +44,21 @@ const upload = multer({
   },
 });
 
+function decodeUploadedFilename(name) {
+  if (!name) return "file";
+  return Buffer.from(name, "latin1").toString("utf8");
+}
+
+function setUtf8DownloadHeaders(res, originalName) {
+  const asciiFallback =
+    originalName.replace(/[^ -~]/g, "_").replace(/["\\]/g, "_") || "download";
+  const encoded = encodeURIComponent(originalName);
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${asciiFallback}"; filename*=UTF-8''${encoded}`
+  );
+}
+
 async function renderDashboard(res, currentUser, error = null, success = null, statusCode = 200) {
   const users = await all("SELECT id, username, role, created_at FROM users ORDER BY username");
   const files = await all(`
@@ -165,11 +180,13 @@ router.post("/upload", requireRole("admin"), (req, res) => {
         return renderDashboard(res, req.session.user, "Assigned user is invalid.", null, 400);
       }
 
+      const originalName = decodeUploadedFilename(req.file.originalname);
+
       await run(
         `INSERT INTO files (original_name, stored_name, mime_type, size_bytes, assigned_user_id, uploaded_by_id)
          VALUES (?, ?, ?, ?, ?, ?)`,
         [
-          req.file.originalname,
+          originalName,
           req.file.filename,
           req.file.mimetype,
           req.file.size,
@@ -182,7 +199,7 @@ router.post("/upload", requireRole("admin"), (req, res) => {
         res,
         req.session.user,
         null,
-        `File '${req.file.originalname}' uploaded and assigned successfully.`
+        `File '${originalName}' uploaded and assigned successfully.`
       );
     } catch (e) {
       await safeDeleteUploadedFile(req.file);
@@ -197,7 +214,8 @@ router.get("/files/:id/download", requireRole("admin"), async (req, res) => {
     if (!file) return res.status(404).send("File not found");
 
     const filePath = path.join(storageDir, file.stored_name);
-    return res.download(filePath, file.original_name);
+    setUtf8DownloadHeaders(res, file.original_name);
+    return res.sendFile(filePath);
   } catch (err) {
     return res.status(500).send("Could not download file");
   }

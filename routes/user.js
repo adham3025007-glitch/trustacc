@@ -8,6 +8,16 @@ const storageDir = process.env.STORAGE_DIR
   ? path.resolve(process.cwd(), process.env.STORAGE_DIR)
   : path.join(__dirname, "..", "storage");
 
+function setUtf8DownloadHeaders(res, originalName) {
+  const asciiFallback =
+    originalName.replace(/[^ -~]/g, "_").replace(/["\\]/g, "_") || "download";
+  const encoded = encodeURIComponent(originalName);
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${asciiFallback}"; filename*=UTF-8''${encoded}`
+  );
+}
+
 router.get("/dashboard", requireRole("user"), async (req, res) => {
   try {
     const files = await all(
@@ -39,7 +49,8 @@ router.get("/files/:id/download", requireRole("user"), async (req, res) => {
     if (!file) return res.status(404).send("File not found or access denied");
 
     const filePath = path.join(storageDir, file.stored_name);
-    return res.download(filePath, file.original_name);
+    setUtf8DownloadHeaders(res, file.original_name);
+    return res.sendFile(filePath);
   } catch (err) {
     return res.status(500).send("Could not download file");
   }
