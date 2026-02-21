@@ -52,26 +52,15 @@ function clearFailedAttempts(key) {
   attemptsByKey.delete(key);
 }
 
-function ensureLoggedOutLoginPage(req, res, role) {
-  if (!req.session.user) return null;
-  if (req.session.user.role === role) return res.redirect(role === "admin" ? "/admin/dashboard" : "/user/dashboard");
-  return res.redirect(req.session.user.role === "admin" ? "/admin/dashboard" : "/user/dashboard");
-}
-
 router.get("/", (req, res) => {
-  if (!req.session.user) return res.redirect("/login/user");
-  return res.redirect(req.session.user.role === "admin" ? "/admin/dashboard" : "/user/dashboard");
+  return res.redirect("/login/user");
 });
 
 router.get("/login/admin", (req, res) => {
-  const redirectResponse = ensureLoggedOutLoginPage(req, res, "admin");
-  if (redirectResponse) return;
   res.render("login", { role: "admin", error: null });
 });
 
 router.get("/login/user", (req, res) => {
-  const redirectResponse = ensureLoggedOutLoginPage(req, res, "user");
-  if (redirectResponse) return;
   res.render("login", { role: "user", error: null });
 });
 
