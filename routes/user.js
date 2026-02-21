@@ -37,6 +37,10 @@ router.get("/dashboard", requireRole("user"), async (req, res) => {
   }
 });
 
+router.get("/", requireRole("user"), (req, res) => {
+  return res.redirect("/user/dashboard");
+});
+
 router.get("/files/:id/download", requireRole("user"), async (req, res) => {
   try {
     const file = await get(

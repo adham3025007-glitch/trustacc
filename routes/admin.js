@@ -98,6 +98,10 @@ router.get("/dashboard", requireRole("admin"), async (req, res) => {
   }
 });
 
+router.get("/", requireRole("admin"), (req, res) => {
+  return res.redirect("/admin/dashboard");
+});
+
 router.post("/users", requireRole("admin"), async (req, res) => {
   try {
     const { username, password, confirmPassword, role } = req.body;
